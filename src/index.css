@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  color: white;
+  background-color: #465280;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -18,4 +20,74 @@ code {
 
 .header-m1{
   text-align: center;
+}
+.timer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timer-content{
+  height: 90vh;
+}
+
+.flat-input-1{
+  border: 0;
+  text-shadow: 1px 2px #808080;
+  color: white;
+  background-color: transparent;
+  outline: 0;
+  max-width: 1.8em;
+  -moz-appearance: textfield;
+  text-align: center;
+}
+.flat-input-1::placeholder{
+  color: white;
+  opacity: 1;
+}
+
+input[type="number"]:disabled{
+  color: #c6dcff;
+}
+
+.flat-input-1 input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.flat-input-1:focus {
+  outline: none !important;
+}
+
+.btn-flat-1 {
+  background-color:  #3e63aa;
+  color: white;
+  font-size: 0.4em;
+  border-radius: 0;
+}
+
+.btn-flat-1:hover {
+  background-color: #324a79 !important;
+  box-shadow: 5px 10px #c6775f !important;
+}
+
+.btn-flat-1:focus {
+  background-color: #324a79 !important;
+  box-shadow: 5px 10px #c6775f !important;
+}
+
+.large-font{
+  font-size: 4.4em;
+}
+
+.tip-flat-1{
+  background-color: #324a79 !important;
+  box-shadow: 5px -6px #365082 !important;
+  border-left: 3px solid rgb(225, 163, 108);
+  height: 100px;
+  font-size: 1.2em;
+  position: absolute;
+  max-width: 80%;
+  bottom: 10%;
+  padding: 10px;
 }
