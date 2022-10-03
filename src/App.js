@@ -13,6 +13,7 @@ class Timer extends React.Component {
     };
 
     // Bind the event handler
+    this.child = React.createRef();
     this.handleChange = this.handleChange.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.handleFocusOut = this.handleFocusOut.bind(this);
@@ -57,9 +58,19 @@ class Timer extends React.Component {
     this.setState(state => ({
       disabled: true
     }));
+    this.child.current.start();
+  }
+
+  timerHasStopped() {
+    this.child.current.clear();
+    this.setState(state => ({
+      disabled: false
+    }));
+    clearInterval(this.interval);
   }
 
   tick() {
+
     // Make the UI update....
     if(this.state.hours == "") {
       this.state.hours = "00";
@@ -72,14 +83,21 @@ class Timer extends React.Component {
     }
 
     let totalSeconds = parseInt(this.state.hours) * 3600 + parseInt(this.state.minutes) * 60 + parseInt(this.state.seconds);
+
     if(totalSeconds <= 0)
     {
       // Do not countdown, it has finished
       // DO ALERT HERE...
+      this.timerHasStopped();
       return;
+    }
+    if(totalSeconds <= 10)
+    {
+      this.child.current.setAll(totalSeconds - 1);
     }
 
     totalSeconds -= 1;
+    
     let hours = Math.floor(totalSeconds / 3600);
     let minutes = Math.floor(totalSeconds % 3600 / 60);
     let seconds = Math.floor(totalSeconds % 3600 % 60);
@@ -121,7 +139,96 @@ class Timer extends React.Component {
         </div>
         <div className='d-none d-sm-block tip-flat-1'>
           <p><b>Note:</b> A Simple Countdown Timer Made With ReactJS</p>
+          <p>With a background animation using css animation keyframes</p>
         </div>
+        <div className='rainfall'>
+          <Rainfall ref={this.child}/>
+        </div>
+      </div>
+    )
+  }
+}
+
+class Rainfall extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { items: [], left: 0, top: 0, isClearing: false, randomize: true};
+  }
+
+  start() {
+    this.interval = setInterval(() => this.tick(), 100);
+    this.state.randomize = true;
+    this.state.isClearing = false;
+  }
+
+  setAll(number) {
+    this.state.randomize = false;
+    for(let i = 0; i < this.state.items.length; i++) {
+      this.state.items[i].number = number;
+    }
+
+    this.setState(state => ({
+      items: state.items
+    }));
+  }
+
+  clear() {
+    //clearInterval(this.interval);
+    this.state.isClearing = true;
+
+    
+    //this.state.items = [];
+
+    // this.setState(state => ({
+    //   items: state.items
+    // }));
+  }
+
+  tick() {
+    if(this.state.isClearing) {
+      this.state.items.pop();
+      this.setState(state => ({
+        items: state.items
+      }));
+      return;
+    }
+
+    const newItem = { 
+      x: (Math.random() * 100).toString() + "%",
+      number: Math.round(Math.random() * 10)
+    };
+    if(this.state.items.length < 250) {
+      this.state.items.push(newItem)
+    }
+
+    if(this.state.randomize)
+    {
+      for(let i = 0; i < this.state.items.length; i++) {
+        this.state.items[i].number = Math.round(Math.random() * 10);
+      }
+    }
+
+    this.setState(state => ({
+      items: state.items
+    }));
+  }
+
+  componentDidMount() {
+
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.items.map(item => (
+          <div className='box' style={{left: item.x}}>
+            { item.number }
+          </div>
+        ))}
       </div>
     )
   }
